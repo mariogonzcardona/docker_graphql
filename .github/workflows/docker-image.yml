@@ -12,7 +12,6 @@ jobs:
     env:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      NEW_VERSION: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Check out code
@@ -29,6 +28,8 @@ jobs:
         id: version
 
       - name: Docker Login
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
           echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
