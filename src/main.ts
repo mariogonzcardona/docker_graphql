@@ -15,5 +15,7 @@ async function bootstrap() {
   await app.listen(3000);
   
   console.log('Aplicación corriendo en puerto: ', 3000 );
+  // Direccion de la aplicacion
+  console.log('http://localhost:3000/graphql');
 }
 bootstrap();
