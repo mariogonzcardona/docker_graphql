@@ -9,44 +9,39 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Git Semantic Version
-        uses: PaulHatch/semantic-version@v5.4.0
+        uses: PaulHatch/semantic-version@v4.0.3
         with:
           major_pattern: 'major:'
           minor_pattern: 'feat:'
-          format: '${{ major }}.${{ minor }}.${{ patch }}-prerelease${{ increment }}'
+          format: '${major}.${minor}.${patch}-prerelease${increment}'
         id: version
 
       - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
         run: |
-          echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          echo "Fin del Login"
 
-      - name: Echo Version
-        run: |
-          echo "Version: ${{ steps.version.outputs.version }}"
-
-      # - name: Build the Docker image
+      # - name: Build Docker Image
+      #   env:
+      #     NEW_VERSION: ${{ steps.version.outputs.version }}
       #   run: |
-      #     echo "Inicio del Build"
-      #     docker build -t $DOCKER_USER/docker_graphql:${{ steps.version.outputs.version }} .
-      #     docker build -t $DOCKER_USER/docker_graphql:latest .
-      #     echo "Fin del Build"
+      #     docker build -t klerith/docker-graphql:$NEW_VERSION .
+      #     docker build -t klerith/docker-graphql:latest .
 
-      # - name: Push the Docker image
+      # - name: Push Docker Image
+      #   env:
+      #     NEW_VERSION: ${{ steps.version.outputs.version }}
       #   run: |
-      #     echo "Inicio del Push"
-      #     docker push $DOCKER_USER/docker_graphql:${{ steps.version.outputs.version }}
-      #     docker push $DOCKER_USER/docker_graphql:latest
-      #     echo "Fin del Push"
+      #     docker push klerith/docker-graphql:$NEW_VERSION
+      #     docker push klerith/docker-graphql:latest
