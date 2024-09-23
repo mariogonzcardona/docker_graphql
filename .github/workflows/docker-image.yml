@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ['main']
+    # branches: ['main']
   pull_request:
     branches: ['main']
 
@@ -24,7 +24,7 @@ jobs:
         with:
           major_pattern: 'major:'
           minor_pattern: 'feat:'
-          format: '${major}.${minor}.${patch}-prerelease${increment}'
+          format: '${{ major }}.${{ minor }}.${{ patch }}-prerelease${{ increment }}'
         id: version
 
       - name: Docker Login
@@ -32,7 +32,10 @@ jobs:
           echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Fin del Login"
-          echo "Version: ${{ steps.version.outputs.version }} !!!!!!!!"
+
+      - name: Echo Version
+        run: |
+          echo "Version: ${{ steps.version.outputs.version }}"
 
       # - name: Build the Docker image
       #   run: |
