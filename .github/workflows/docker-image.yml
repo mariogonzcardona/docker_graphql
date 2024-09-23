@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    # branches: ['main']
+    branches: ['main']
   pull_request:
     branches: ['main']
 
@@ -28,24 +28,22 @@ jobs:
         id: version
 
       - name: Docker Login
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
           echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Fin del Login"
-          echo "Version: $NEW_VERSION!!!!!!!!"
-
+          echo "Version: ${{ steps.version.outputs.version }} !!!!!!!!"
 
       # - name: Build the Docker image
       #   run: |
       #     echo "Inicio del Build"
-      #     docker build -t $DOCKER_USER/docker_graphql:1.0.0 .
+      #     docker build -t $DOCKER_USER/docker_graphql:${{ steps.version.outputs.version }} .
       #     docker build -t $DOCKER_USER/docker_graphql:latest .
       #     echo "Fin del Build"
+
       # - name: Push the Docker image
       #   run: |
       #     echo "Inicio del Push"
-      #     docker push $DOCKER_USER/docker_graphql:1.0.0
+      #     docker push $DOCKER_USER/docker_graphql:${{ steps.version.outputs.version }}
       #     docker push $DOCKER_USER/docker_graphql:latest
       #     echo "Fin del Push"
