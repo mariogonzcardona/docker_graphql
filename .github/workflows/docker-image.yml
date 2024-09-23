@@ -31,4 +31,5 @@ jobs:
         run: |
           echo "Inicio del Push"
           docker push $DOCKER_USER/docker_graphql:1.0.0
+          docker push $DOCKER_USER/docker_graphql:latest
           echo "Fin del Push"
