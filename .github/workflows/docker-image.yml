@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -22,7 +22,7 @@ jobs:
           major_pattern: 'major:'
           minor_pattern: 'feat:'
           patch_pattern: 'fix:'
-          format: '${{major}}.${{minor}}.${{patch}}-prerelease-${{increment}}'
+          format: '${{version}}-prerelease${{increment}}'
         id: version
 
       - name: Docker Login
