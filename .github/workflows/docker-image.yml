@@ -4,23 +4,31 @@ on:
   push:
     # branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Docker Login
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        echo "Inicio del Login"
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "Fin del Login"
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "Inicio del Login"
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          echo "Fin del Login"
+      - name: Build the Docker image
+        run: |
+          echo "Inicio del Build"
+          docker build -t $DOCKER_USER/docker_graphql:1.0.0 .
+          echo "Fin del Build"
+      - name: Push the Docker image
+        run: |
+          echo "Inicio del Push"
+          docker push $DOCKER_USER/docker_graphql:1.0.0
+          echo "Fin del Push"
