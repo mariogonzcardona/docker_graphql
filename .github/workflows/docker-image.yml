@@ -9,10 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      NEW_VERSION: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout code
@@ -28,13 +24,16 @@ jobs:
           format: '${{major}}.${{minor}}.${{patch}}-prerelease${{increment}}'
         id: version
 
+      # Paso intermedio para exportar la versión a una variable de entorno global
       - name: Set version environment variable
         run: |
           echo "NEW_VERSION=${{ steps.version.outputs.version }}" >> $GITHUB_ENV
 
       - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Versión: $NEW_VERSION"
 
