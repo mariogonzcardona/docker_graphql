@@ -24,27 +24,22 @@ jobs:
           format: '${{major}}.${{minor}}.${{patch}}-prerelease${{increment}}'
         id: version
 
-      # Paso intermedio para exportar la versión a una variable de entorno global
-      - name: Set version environment variable
-        run: |
-          echo "NEW_VERSION=${{ steps.version.outputs.version }}" >> $GITHUB_ENV
-
       - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          echo "Versión: $NEW_VERSION"
+          echo "Version: ${{ steps.version.outputs.version }}"
 
       - name: Build Docker Image
         run: |
-          echo "Building Docker image with version: $NEW_VERSION"
-          docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
+          echo "Building Docker image with version: ${{ steps.version.outputs.version }}"
+          docker build -t mariogonzcardona/docker_graphql:${{ steps.version.outputs.version }} .
           docker build -t mariogonzcardona/docker_graphql:latest .
 
       - name: Push Docker Image
         run: |
-          echo "Pushing Docker image with version: $NEW_VERSION"
-          docker push mariogonzcardona/docker_graphql:$NEW_VERSION
+          echo "Pushing Docker image with version: ${{ steps.version.outputs.version }}"
+          docker push mariogonzcardona/docker_graphql:${{ steps.version.outputs.version }}
           docker push mariogonzcardona/docker_graphql:latest
