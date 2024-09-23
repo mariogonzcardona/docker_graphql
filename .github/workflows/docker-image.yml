@@ -22,28 +22,30 @@ jobs:
           major_pattern: 'major:'
           minor_pattern: 'feat:'
           patch_pattern: 'fix:'
-          format: '${major}.${minor}.${patch}-prerelease ${increment}'
+          format: '${{major}}.${{minor}}.${{patch}}-prerelease${{increment}}'
         id: version
+
+      # Paso para capturar la versión y guardarla en el entorno global
+      - name: Set version environment variable
+        run: |
+          echo "NEW_VERSION=${{ steps.version.outputs.version }}" >> $GITHUB_ENV
 
       - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          echo ${{ steps.version.outputs.version }}
+          echo "Version: $NEW_VERSION"
 
       - name: Build Docker Image
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
+          echo "Building Docker image with version: $NEW_VERSION"
           docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
           docker build -t mariogonzcardona/docker_graphql:latest .
 
       # - name: Push Docker Image
-      #   env:
-      #     NEW_VERSION: ${{ steps.version.outputs.version }}
       #   run: |
+      #     echo "Pushing Docker image with version: $NEW_VERSION"
       #     docker push mariogonzcardona/docker_graphql:$NEW_VERSION
       #     docker push mariogonzcardona/docker_graphql:latest
