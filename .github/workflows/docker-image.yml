@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -34,16 +34,16 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo ${{ steps.version.outputs.version }}
 
-      # - name: Build Docker Image
-      #   env:
-      #     NEW_VERSION: ${{ steps.version.outputs.version }}
-      #   run: |
-      #     docker build -t klerith/docker-graphql:$NEW_VERSION .
-      #     docker build -t klerith/docker-graphql:latest .
+      - name: Build Docker Image
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
+          docker build -t mariogonzcardona/docker_graphql:latest .
 
       # - name: Push Docker Image
       #   env:
       #     NEW_VERSION: ${{ steps.version.outputs.version }}
       #   run: |
-      #     docker push klerith/docker-graphql:$NEW_VERSION
-      #     docker push klerith/docker-graphql:latest
+      #     docker push mariogonzcardona/docker_graphql:$NEW_VERSION
+      #     docker push mariogonzcardona/docker_graphql:latest
