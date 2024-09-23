@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    # branches: [ "main" ]
+    branches: ['main']
   pull_request:
     branches: ['main']
 
@@ -12,25 +12,39 @@ jobs:
     env:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      NEW_VERSION: ${{ steps.version.outputs.version }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Git Semantic Version
+        uses: PaulHatch/semantic-version@v5.4.0
+        with:
+          major_pattern: 'major:'
+          minor_pattern: 'feat:'
+          format: '${major}.${minor}.${patch}-prerelease${increment}'
+        id: version
+
       - name: Docker Login
         run: |
           echo "Inicio del Login"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Fin del Login"
-      - name: Build the Docker image
-        run: |
-          echo "Inicio del Build"
-          docker build -t $DOCKER_USER/docker_graphql:1.0.0 .
-          docker build -t $DOCKER_USER/docker_graphql:latest .
-          echo "Fin del Build"
-      - name: Push the Docker image
-        run: |
-          echo "Inicio del Push"
-          docker push $DOCKER_USER/docker_graphql:1.0.0
-          docker push $DOCKER_USER/docker_graphql:latest
-          echo "Fin del Push"
+          echo "Version: $NEW_VERSION!!!!!!!!"
+
+
+      # - name: Build the Docker image
+      #   run: |
+      #     echo "Inicio del Build"
+      #     docker build -t $DOCKER_USER/docker_graphql:1.0.0 .
+      #     docker build -t $DOCKER_USER/docker_graphql:latest .
+      #     echo "Fin del Build"
+      # - name: Push the Docker image
+      #   run: |
+      #     echo "Inicio del Push"
+      #     docker push $DOCKER_USER/docker_graphql:1.0.0
+      #     docker push $DOCKER_USER/docker_graphql:latest
+      #     echo "Fin del Push"
