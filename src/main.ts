@@ -16,6 +16,6 @@ async function bootstrap() {
   console.log('Bienvenido a la aplicacion de GraphQL');
   console.log('Aplicación corriendo en puerto: ', 3000 );
   // Direccion de la aplicacion
-  // console.log('http://localhost:3000/graphql');
+  console.log('http://localhost:3000/graphql');
 }
 bootstrap();
