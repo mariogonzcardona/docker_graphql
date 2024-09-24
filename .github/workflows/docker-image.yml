@@ -26,10 +26,12 @@ jobs:
         run: |
           echo "Construyendo la imagen de Docker"
           docker build -t mariogonzcardona/docker_graphql:1.0.0 .
+          docker build -t mariogonzcardona/docker_graphql:latest .
           echo "Imagen construida"
       
       - name: Push Docker Image
         run: |
           echo "Subiendo la imagen de Docker"
           docker push mariogonzcardona/docker_graphql:1.0.0
+          docker push mariogonzcardona/docker_graphql:latest
           echo "Imagen subida"
