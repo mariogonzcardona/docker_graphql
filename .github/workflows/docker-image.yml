@@ -31,6 +31,7 @@ jobs:
           echo "Proceso de Login en Docker Hub"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Login exitoso"
+          echo " Prueba de la nueva versión"
           echo "Nueva versión: $NEW_VERSION"
 
       # - name: Build Docker Image
