@@ -39,12 +39,12 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           echo "Generated version: ${{ steps.version.outputs.version }}"
 
-    # - name: Build Docker Image
-    #   env:
-    #     NEW_VERSION: ${{ steps.version.outputs.version }}
-    #   run: |
-    #     docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
-    #     docker build -t mariogonzcardona/docker_graphql:latest .
+      - name: Build Docker Image
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
+          docker build -t mariogonzcardona/docker_graphql:latest .
 
     # - name: Push Docker Image
     #   env:
