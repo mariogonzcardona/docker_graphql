@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": "file:///c%3A/Users/mario/OneDrive/Documentos/Github_Projects/docker_graphql/.github/workflows/docker-image.yml"
+    }
+}

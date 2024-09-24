@@ -1,54 +1,23 @@
 name: Docker Image CI
-
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          tags: true
-
-      - name: Git Semantic Version
-        uses: PaulHatch/semantic-version@v5.4.0
-        with:
-          major_pattern: 'major:'
-          minor_pattern: 'feat:'
-          patch_pattern: 'fix:'
-          format: '${major}.${minor}.${patch}'
-        id: version
-
-      - name: Show Version
-        run: |
-          echo "Generated version: ${{ steps.version.outputs.version }}"
 
       - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          NEW_VERSION: ${{ steps.version.outputs.version }}
-        run: |
+        run : |
+          echo "Proceso de Login en Docker Hub"
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          echo "Generated version: ${{ steps.version.outputs.version }}"
-
-      - name: Build Docker Image
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          docker build -t mariogonzcardona/docker_graphql:$NEW_VERSION .
-          docker build -t mariogonzcardona/docker_graphql:latest .
-
-    # - name: Push Docker Image
-    #   env:
-    #     NEW_VERSION: ${{ steps.version.outputs.version }}
-    #   run: |
-    #     docker push mariogonzcardona/docker_graphql:$NEW_VERSION
-    #     docker push mariogonzcardona/docker_graphql:latest
+          echo "Login exitoso"
