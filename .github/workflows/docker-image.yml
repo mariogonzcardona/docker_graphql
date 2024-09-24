@@ -15,12 +15,13 @@ jobs:
 
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v5.4.0
-        with: 
+        with:
           major_pattern: "major:"
-          minor_pattern: "(MINOR)"
+          minor_pattern: "feat:"
           version_format: "${major}.${minor}.${patch}-${increment}"
+          echo "Version actual: ${{ steps.version.outputs.version }}"
         id: version
-            
+
       - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
@@ -38,7 +39,7 @@ jobs:
       #     docker build -t mariogonzcardona/docker_graphql:1.0.0 .
       #     docker build -t mariogonzcardona/docker_graphql:latest .
       #     echo "Imagen construida"
-      
+
       # - name: Push Docker Image
       #   run: |
       #     echo "Subiendo la imagen de Docker"
